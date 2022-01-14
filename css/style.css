@@ -1,0 +1,56 @@
+*, *>* {
+	box-sizing: border-box;
+	padding: 0.1px;
+}
+body {
+	margin: 0;
+	color: #666;
+	background-color: #0f0f0f
+}
+p {
+	margin: 0;
+}
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+img {
+	width: 100%;
+}
+
+
+table {
+	border:  1px solid white;
+	width:  800px;
+}
+tr td {
+	background-color: violet;
+	display: inline-block;
+	margin:  2px;
+}
+tr#topHand td {
+	background-color: darkorange;
+}
+#nomansLand {
+	padding:  16px;
+	display: block;
+	background-color: red;
+}
+.is-hand {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+}
+
+.hp-container {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+}
+.fake-for-height {
+	min-height:  100px;
+	background-color: transparent;
+	display: inline-block;
+	margin:  0;
+}
