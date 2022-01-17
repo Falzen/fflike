@@ -24,6 +24,7 @@ function init() {
 	});
 	refreshHand('topHand')
 	refreshHand('bottomHand');
+	setEventListeners();
 }
 
 
@@ -65,7 +66,12 @@ var players = {
 		frontSoldiers: []
 	}
 }
+
+var skillIdcpt = 0;
+let allSkillsList = [];
 var shortSwordStrike = {
+	techid: ++skillIdcpt,
+	techname: 'shortSwordStrike',
 	name: 'simple attack',
 	description: "attacks with short sword",
 	damage: 4,
@@ -74,7 +80,10 @@ var shortSwordStrike = {
 	hasInBackDisadvantage: false,
 	hasTargetInBackDisadvantage: false,
 }
+allSkillsList.push(shortSwordStrike);
 var fanOfKnives = {
+	techid: ++skillIdcpt,
+	techname: 'fanOfKnives',
 	name: 'fan of knives',
 	description: "attacks with multiple knives",
 	damage: 2,
@@ -83,7 +92,8 @@ var fanOfKnives = {
 	hasInBackDisadvantage: true,
 	hasTargetInBackDisadvantage: true,
 }
-
+allSkillsList.push(fanOfKnives);
+let allSkillsTemplatesByTechname = makeMapByAttrFromList(allSkillsList, 'techname')
 
 
 
@@ -93,13 +103,12 @@ var oneCard = {
 	name: 'cartTest'+cardIdcpt,
 	hp: 7,
 	hpMax: 7,
-	passiveAttak: 2,
-	skills: [new Skill(shortSwordStrike), new Skill(fanOfKnives)]
+	passiveAttack: 2,
+	skills: ['shortSwordStrike', 'fanOfKnives']
 }
 
 players.top.hand.push(new Card(oneCard), new Card(oneCard));
 players.bottom.hand.push(new Card(oneCard), new Card(oneCard));
-
 
 function refreshHand(handId) {
 	// choose data from handid
@@ -115,19 +124,70 @@ function refreshHand(handId) {
 	$('#'+handId).append(output);
 }
 
+function refreshBattlefieldPartById(whereId) {
+	// choose data from handid
+	let wantedHand = 
+		whereId == 'bottomHand' ? players.bottom.hand : 
+		whereId == 'topHand' ? players.top.hand : 
+		whereId == 'bottomFrontSoldiers' ? players.bottom.backSoldiers : 
+		whereId == 'bottomBackSoldiers' ? players.bottom.frontSoldiers : 
+		whereId == 'topFrontSoldiers' ? players.top.backSoldiers : 
+		hereId == 'topBackSoldiers' ? players.top.frontSoldiers : 
+		 null;
+
+	$('#'+handId).html('<td class="fake-for-height"></td>');
+	var output = '';
+	for (let i = 0; i < wantedHand.length; i++) {
+		output += makeCardDom(wantedHand[i]);
+	}
+	$('#'+handId).append(output);
+}
 
 function makeCardDom(data) {
-	let output = '<td id="card" data-cardid="'+ data.id + '">'
-					+ '<div class="card-container hand bottom-hand">'
-						+ '<div class="card-content">'
-							+ '<div class="hp-container">'
-								+ '<p class="">' + data.passiveAttak + '</p>'
-								+ '<p class="">' + data.hp + '</p>'
-							+ '</div>'
-							+ '<h3>' + data.name + '</h3>'
-						 	+ '<p>id : ' + data.id + '</p>'
-					 	+ '</div>'
-					 + '</div>'
-				+ '</td>';
-	return output;
+	let cardDomOutput = 
+		'<td id="card">' +
+		   '<div class="card-container hand bottom-hand" data-cardid="{{id}}">' +
+		      '<div class="card-content">' +
+		         // '<ul class="skills-popup">' + 
+		         	// '{{skillsList}}' +
+		         // '</ul>' +
+		         '<div class="hp-container">' +
+		            '<p class="">{{passiveAttack}}</p>' +
+		            '<p class="">{{hp}}</p>' +
+		         '</div>' +
+		         '<h3>{{name}}</h3>' +
+		         '<p>id : {{id}}</p>' +
+		      '</div>' +
+		   '</div>' +
+		'</td>';
+	
+	let tweakedOutput = cardDomOutput.replaceAll('{{id}}', data.id)
+		.replaceAll('{{passiveAttack}}', data.passiveAttack)
+		.replaceAll('{{hp}}', data.hp)
+		.replaceAll('{{name}}', data.name);
+
+	return tweakedOutput;
+}
+
+
+
+
+function makeSkillDom(data) {
+	let skillDomOutput = 
+		'<li class="skill">' +
+		 	'<p id="skill-name">{{name}}</p>' +
+		 	'<p id="skill-description">{{description}}</p>' +
+		 	'<p id="skill-details">' +
+			 	'<span id="skill-dmg">{{damage}}</span>' +
+			 	'&nbsp;(<span id="skill-type">{{targetType}}</span>)' +
+		 	'</p>' +
+	 	'</li>';
+
+
+	let tweakedOutput = skillDomOutput.replaceAll('{{name}}', data.name)
+		.replaceAll('{{description}}', data.description)
+		.replaceAll('{{damage}}', data.damage)
+		.replaceAll('{{targetType}}', data.targetType);
+
+	return tweakedOutput;
 }

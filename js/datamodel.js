@@ -5,7 +5,6 @@ var skillIdCpt = 0;
 class Skill {
     constructor(data) {
 		this.id = ++skillIdCpt;
-    	console.log('skillIdCpt : ', skillIdCpt);
 		this.name = data.name;
 		this.description = data.description;
 		this.damage = data.damage;
@@ -21,13 +20,20 @@ var cardIdCpt = 0;
 class Card {
     constructor(data) {
 		this.id = ++cardIdCpt;
-    	console.log('cardIdCpt : ', cardIdCpt);
 		this.name = data.name;
 		this.description = data.description;
 		this.hp = data.hp;
 		this.hpMax = data.hpMax;
-		this.passiveAttak = data.passiveAttak;
-		this.skills = data.skills;
+		this.passiveAttack = data.passiveAttack;
+		this.skills = [];
+		if(data.skills && data.skills.length != 0) {
+			for(let i=0; i<data.skills.length; i++) {
+				let skillsListForTechName = allSkillsTemplatesByTechname.get(data.skills[i]);
+				if(skillsListForTechName.size != 0) {
+					this.skills.push(new Skill(skillsListForTechName[0]));
+				}
+			}
+		}
     }
 }
 
@@ -112,9 +118,7 @@ class Card {
 //     	this.buyingPrice = data.buyingPrice;
 //     }
 //     buy(event, rivetsBinding) {
-//     	console.log('buy()');
 //     	let elem = rivetsBinding.eq ? rivetsBinding.eq : rivetsBinding.it;
-//         console.log(JSON.stringify(elem));
 //     	let buyingPrice = elem.buyingPrice;
 //         if(player.money < buyingPrice) {
 //         	return;
@@ -124,7 +128,6 @@ class Card {
 //         player.backpack.push(boughtElement[0]);
 //     }
 //     sell(event, rivetsBinding) {
-//     	console.log('sell()');
 //     	let elem = rivetsBinding.eq ? rivetsBinding.eq : rivetsBinding.it;
 //     	if(elem.isEquipped) {
 //     		elem.isEquipped = false;
@@ -160,7 +163,6 @@ class Card {
 
 // class Equipment_Entity extends BuyAndSell_Methods {
 //     constructor(data) {
-//     	console.log('data.bonuses : ', data.bonuses);
 //         super(data);
 //     	this.type = data.type;
 // 		this.name = data.name;
