@@ -28,6 +28,8 @@ img {
 
 
 table {
+	width: 90%;
+    margin: 0 auto;
 }
 tr td {
 	background-color: violet;
@@ -42,6 +44,25 @@ tr#topHand td {
 	display: block;
 	background-color: red;
 }
+
+
+
+
+tr#topFrontSoldiers,
+tr#topBackSoldiers {
+    box-shadow: 0 -2px 0px -1px grey;
+}
+tr#bottomFrontSoldiers,
+tr#bottomBackSoldiers {
+    box-shadow: 0 2px 0px -1px grey;
+}
+
+
+
+
+
+
+
 .is-hand {
 	display: flex;
 	flex-flow: row nowrap;
@@ -121,3 +142,20 @@ span#skill-type {
 
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.is-card {
+	transition:  all 0.2s ease;
+}
+.is-selected {
+    transform: translateY(-15px) rotateZ(5deg);
+    box-shadow: 0 0 15px -3px lightgreen;
+}

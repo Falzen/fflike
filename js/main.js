@@ -40,16 +40,16 @@ var gt = {
 }
 
 function setEventListeners() {
-	$(document).on('click', '.card-container', function(ev) {
-		if(gt.isCardSelected) {
+	$(document).on('click', '.is-card', function(ev) {
+		if($(ev.currentTarget).hasClass('is-selected')) {
+			$(ev.currentTarget).removeClass('is-selected');
 			gt.isCardSelected = false;
-			gt.selectedCardId = null;
 			return;
 		}
+		let cardId = ev.currentTarget.id;
+		$('.is-card').removeClass('is-selected');
+		$('#' + cardId).addClass('is-selected');
 		gt.isCardSelected = true;
-		gt.selectedCardId = ev.target
-
-
 	});
 }
 
@@ -145,12 +145,9 @@ function refreshBattlefieldPartById(whereId) {
 
 function makeCardDom(data) {
 	let cardDomOutput = 
-		'<td id="card">' +
-		   '<div class="card-container hand bottom-hand" data-cardid="{{id}}">' +
+		'<td id="card{{id}}" class="is-card noselect">' +
+		   '<div class="card-container" data-cardid="{{id}}">' +
 		      '<div class="card-content">' +
-		         // '<ul class="skills-popup">' + 
-		         	// '{{skillsList}}' +
-		         // '</ul>' +
 		         '<div class="hp-container">' +
 		            '<p class="">{{passiveAttack}}</p>' +
 		            '<p class="">{{hp}}</p>' +
